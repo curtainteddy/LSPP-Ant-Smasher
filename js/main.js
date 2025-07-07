@@ -44,11 +44,11 @@ let soundOn = true;
 
 // Add smash sounds array and index
 const smashSounds = [
-  new Audio("../assets/smash_1.mp3"),
-  new Audio("../assets/smash_2.mp3"),
-  new Audio("../assets/smash_3.mp3"),
-  new Audio("../assets/smash_4.mp3"),
-  new Audio("../assets/smash_5.mp3"),
+  new Audio("./assets/smash_1.mp3"),
+  new Audio("./assets/smash_2.mp3"),
+  new Audio("./assets/smash_3.mp3"),
+  new Audio("./assets/smash_4.mp3"),
+  new Audio("./assets/smash_5.mp3"),
 ];
 let smashSoundIndex = 0;
 
