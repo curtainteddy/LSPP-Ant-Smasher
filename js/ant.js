@@ -14,9 +14,9 @@ class Ant {
     this.moveTimer = null;
     this.directionTimer = null;
     this.walkFrames = [
-      "/assets/ant_walk_1.png",
-      "/assets/ant_walk_2.png",
-      "/assets/ant_walk_3.png",
+      "/assets/ant_walk_1.webp",
+      "/assets/ant_walk_2.webp",
+      "/assets/ant_walk_3.webp",
     ];
     this.currentFrame = 0;
     this.frameInterval = null;
@@ -138,7 +138,7 @@ class Ant {
     this.isSmashed = true;
     this.antElem.classList.add("smashed");
     // Set smashed ant image
-    this.antElem.style.backgroundImage = "url('/assets/ant_smashed.png')";
+    this.antElem.style.backgroundImage = "url('/assets/ant_smashed.webp')";
     clearInterval(this.moveTimer);
     this.stopRandomDirectionChange();
     this.stopAnimating();

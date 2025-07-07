@@ -16,6 +16,7 @@ const playAgainBtn = document.getElementById("playagain-btn");
 const finalScoreElem = document.getElementById("final-score");
 const finalHighScoreElem = document.getElementById("final-high-score");
 const bgMusic = document.getElementById("bg-music");
+const gameoverSound = document.getElementById("gameover-sound");
 const mainMenuBtn = document.getElementById("mainmenu-btn");
 const optionsBtn = document.getElementById("options-btn");
 const optionsScreen = document.getElementById("options-screen");
@@ -128,7 +129,11 @@ function gameOver() {
   saveHighScore();
   finalScoreElem.textContent = score;
   finalHighScoreElem.textContent = highScore;
-  if (soundOn) bgMusic.pause();
+  if (soundOn) {
+    bgMusic.pause();
+    gameoverSound.currentTime = 0;
+    gameoverSound.play();
+  }
 }
 
 function clearAnts() {
