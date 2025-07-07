@@ -6,6 +6,7 @@
   <title>Ant Smasher Game</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div id="game-container">
@@ -14,6 +15,8 @@
       <img src="/assets/logo.png" alt="Ant Smasher Logo" class="logo">
       <h1>Ant Smasher</h1>
       <button id="start-btn" class="btn">Start Game</button>
+      <button id="options-btn" class="btn">Options</button>
+      <a href="https://github.com/curtainteddy" target="_blank" id="github-btn" class="btn btn-icon" title="GitHub Profile"><i class="fa-brands fa-github"></i></a>
     </div>
 
     <!-- HUD (Score, High Score, Ant Count, Pause) -->
@@ -22,8 +25,8 @@
       <div class="hud-item">High Score: <span id="high-score">0</span></div>
       <div class="hud-item">Ants: <span id="ant-count">0</span></div>
     </div>
-    <button id="sound-btn" class="btn" title="Mute/Unmute">🔊</button>
-    <button id="pause-btn" class="btn" title="Pause">⏸️</button>
+    <button id="sound-btn" class="btn btn-icon" title="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
+    <button id="pause-btn" class="btn btn-icon" title="Pause"><i class="fa-solid fa-pause"></i></button>
 
     <!-- Game Area -->
     <div id="game-area" class="hidden"></div>
@@ -38,10 +41,28 @@
 
     <!-- Game Over Screen -->
     <div id="gameover-screen" class="screen overlay hidden">
-      <h2>Game Over: Ants Took Over!</h2>
+      <h2>Game Over - Ants Took Over!</h2>
       <div>Final Score: <span id="final-score">0</span></div>
       <div>High Score: <span id="final-high-score">0</span></div>
       <button id="playagain-btn" class="btn">Play Again</button>
+    </div>
+
+    <!-- Options Screen -->
+    <div id="options-screen" class="screen hidden">
+      <h2>Options</h2>
+      <div class="option-group">
+        <label for="bgm-volume">BG Music Volume: <span id="bgm-volume-value">100</span>%</label>
+        <input type="range" id="bgm-volume" class="slider" min="0" max="100" value="100">
+      </div>
+      <div class="option-group">
+        <label for="smash-volume">Smash Sound Volume: <span id="smash-volume-value">100</span>%</label>
+        <input type="range" id="smash-volume" class="slider" min="0" max="100" value="100">
+      </div>
+      <div class="option-group">
+        <label for="ant-speed">Ant Speed: <span id="ant-speed-value">3</span></label>
+        <input type="range" id="ant-speed" class="slider" min="1" max="5" value="3">
+      </div>
+      <button id="close-options-btn" class="btn">Close</button>
     </div>
   </div>
   <!-- <audio id="smash-sound" src="/assets/smash.mp3" preload="auto"></audio> -->

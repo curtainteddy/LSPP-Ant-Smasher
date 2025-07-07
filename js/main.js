@@ -17,6 +17,20 @@ const finalScoreElem = document.getElementById("final-score");
 const finalHighScoreElem = document.getElementById("final-high-score");
 const bgMusic = document.getElementById("bg-music");
 const mainMenuBtn = document.getElementById("mainmenu-btn");
+const optionsBtn = document.getElementById("options-btn");
+const optionsScreen = document.getElementById("options-screen");
+const closeOptionsBtn = document.getElementById("close-options-btn");
+const bgmVolumeSlider = document.getElementById("bgm-volume");
+bgmVolumeSlider.value = 100;
+const bgmVolumeValue = document.getElementById("bgm-volume-value");
+const smashVolumeSlider = document.getElementById("smash-volume");
+smashVolumeSlider.value = 100;
+const smashVolumeValue = document.getElementById("smash-volume-value");
+const antSpeedSlider = document.getElementById("ant-speed");
+antSpeedSlider.value = 3;
+const antSpeedValue = document.getElementById("ant-speed-value");
+let antSpeedSetting = 3;
+window.antSpeedSetting = 3;
 
 let ants = [];
 let score = 0;
@@ -57,9 +71,14 @@ function updateHUD() {
 }
 
 function showScreen(screen) {
-  [menuScreen, hud, pauseScreen, gameoverScreen, gameArea].forEach((s) =>
-    s.classList.add("hidden")
-  );
+  [
+    menuScreen,
+    hud,
+    pauseScreen,
+    gameoverScreen,
+    gameArea,
+    optionsScreen,
+  ].forEach((s) => s.classList.add("hidden"));
   pauseBtn.style.display = "none";
   if (screen === "menu") menuScreen.classList.remove("hidden");
   if (screen === "hud") hud.classList.remove("hidden");
@@ -70,6 +89,7 @@ function showScreen(screen) {
   }
   if (screen === "pause") pauseScreen.classList.remove("hidden");
   if (screen === "gameover") gameoverScreen.classList.remove("hidden");
+  if (screen === "options") optionsScreen.classList.remove("hidden");
 }
 
 function startGame() {
@@ -156,7 +176,9 @@ function stopSpawningAnts() {
 function toggleSound() {
   soundOn = !soundOn;
   window.soundOn = soundOn;
-  soundBtn.textContent = soundOn ? "🔊" : "🔇";
+  soundBtn.innerHTML = soundOn
+    ? '<i class="fa-solid fa-volume-high"></i>'
+    : '<i class="fa-solid fa-volume-xmark"></i>';
   localStorage.setItem("antSound", soundOn ? "1" : "0");
   if (!soundOn) {
     bgMusic.pause();
@@ -167,7 +189,26 @@ function toggleSound() {
 
 function loadSettings() {
   soundOn = localStorage.getItem("antSound") !== "0";
-  soundBtn.textContent = soundOn ? "🔊" : "🔇";
+  soundBtn.innerHTML = soundOn
+    ? '<i class="fa-solid fa-volume-high"></i>'
+    : '<i class="fa-solid fa-volume-xmark"></i>';
+  // Load volumes
+  const bgmVol = parseInt(localStorage.getItem("antBgmVolume") || "100", 10);
+  bgmVolumeSlider.value = bgmVol;
+  bgmVolumeValue.textContent = bgmVol;
+  bgMusic.volume = bgmVol / 100;
+  const smashVol = parseInt(
+    localStorage.getItem("antSmashVolume") || "100",
+    10
+  );
+  smashVolumeSlider.value = smashVol;
+  smashVolumeValue.textContent = smashVol;
+  smashSounds.forEach((s) => (s.volume = smashVol / 100));
+  // Load ant speed
+  antSpeedSetting = parseInt(localStorage.getItem("antSpeed") || "3", 10);
+  window.antSpeedSetting = antSpeedSetting;
+  antSpeedSlider.value = antSpeedSetting;
+  antSpeedValue.textContent = antSpeedSetting;
 }
 
 function playNextSmashSound() {
@@ -187,6 +228,35 @@ restartBtn.addEventListener("click", startGame);
 playAgainBtn.addEventListener("click", startGame);
 soundBtn.addEventListener("click", toggleSound);
 mainMenuBtn.addEventListener("click", returnToMainMenu);
+optionsBtn.addEventListener("click", () => {
+  showScreen("options");
+});
+closeOptionsBtn.addEventListener("click", () => {
+  showScreen("menu");
+});
+bgmVolumeSlider.addEventListener("input", () => {
+  const v = parseInt(bgmVolumeSlider.value, 10);
+  bgmVolumeValue.textContent = v;
+  bgMusic.volume = v / 100;
+  localStorage.setItem("antBgmVolume", v);
+});
+smashVolumeSlider.addEventListener("input", () => {
+  const v = parseInt(smashVolumeSlider.value, 10);
+  smashVolumeValue.textContent = v;
+  smashSounds.forEach((s) => (s.volume = v / 100));
+  localStorage.setItem("antSmashVolume", v);
+});
+antSpeedSlider.addEventListener("input", () => {
+  const v = parseInt(antSpeedSlider.value, 10);
+  antSpeedValue.textContent = v;
+  antSpeedSetting = v;
+  window.antSpeedSetting = v;
+  localStorage.setItem("antSpeed", v);
+  // Update speed of existing ants
+  ants.forEach((ant) => {
+    if (ant.updateSpeed) ant.updateSpeed();
+  });
+});
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && gameState === "playing") pauseGame();

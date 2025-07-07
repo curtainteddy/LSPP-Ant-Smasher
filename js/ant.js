@@ -10,13 +10,16 @@ class Ant {
     this.setSize(); // Now measure size
     this.setRandomPosition();
     this.setRandomDirection();
-    this.speed = 1 + Math.random() * 1.5; // px per frame
-    this.spriteIndex = 1;
-    this.spriteTimer = 0;
-    this.spriteInterval = 120; // ms
+    this.speed = (window.antSpeedSetting || 1) * (1 + Math.random() * 0.5); // px per frame, scaled
     this.moveTimer = null;
-    this.animateTimer = null;
     this.directionTimer = null;
+    this.walkFrames = [
+      "/assets/ant_walk_1.png",
+      "/assets/ant_walk_2.png",
+      "/assets/ant_walk_3.png",
+    ];
+    this.currentFrame = 0;
+    this.frameInterval = null;
     this.antElem.addEventListener("click", () => this.smash());
     this.startMoving();
     this.startAnimating();
@@ -95,10 +98,19 @@ class Ant {
   }
 
   startAnimating() {
-    this.animateTimer = setInterval(
-      () => this.animateSprite(),
-      this.spriteInterval
-    );
+    // Start JS-based frame animation
+    this.frameInterval = setInterval(() => {
+      if (this.isSmashed) return;
+      this.currentFrame = (this.currentFrame + 1) % this.walkFrames.length;
+      this.antElem.style.backgroundImage = `url('${
+        this.walkFrames[this.currentFrame]
+      }')`;
+    }, 120); // 120ms per frame, adjust as needed
+  }
+
+  stopAnimating() {
+    if (this.frameInterval) clearInterval(this.frameInterval);
+    this.frameInterval = null;
   }
 
   startRandomDirectionChange() {
@@ -117,12 +129,6 @@ class Ant {
     this.directionTimer = null;
   }
 
-  animateSprite() {
-    if (this.isSmashed) return;
-    this.spriteIndex = (this.spriteIndex % 3) + 1;
-    this.antElem.style.backgroundImage = `url('/assets/ant_walk_${this.spriteIndex}.png')`;
-  }
-
   smash() {
     if (this.isSmashed) return;
     // Play smash sound immediately
@@ -131,10 +137,11 @@ class Ant {
     }
     this.isSmashed = true;
     this.antElem.classList.add("smashed");
+    // Set smashed ant image
     this.antElem.style.backgroundImage = "url('/assets/ant_smashed.png')";
     clearInterval(this.moveTimer);
-    clearInterval(this.animateTimer);
     this.stopRandomDirectionChange();
+    this.stopAnimating();
     setTimeout(() => {
       this.remove();
       if (this.onSmashed) this.onSmashed(this);
@@ -142,9 +149,15 @@ class Ant {
   }
 
   remove() {
+    this.stopAnimating();
     if (this.antElem.parentNode) {
       this.antElem.parentNode.removeChild(this.antElem);
     }
+  }
+
+  updateSpeed() {
+    // Update speed for existing ants when setting changes
+    this.speed = (window.antSpeedSetting || 1) * (1 + Math.random() * 0.5);
   }
 }
 
