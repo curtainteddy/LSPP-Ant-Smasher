@@ -7,7 +7,7 @@ A modern, responsive, and engaging Ant Smasher game built with vanilla HTML, CSS
 
 ## 🎮 Live Demo
 
-**[Play Ant Smasher Now!](https://curtainteddy.github.io/LSPP-Ant-Smasher/)**
+**[Github Pages](https://curtainteddy.github.io/LSPP-Ant-Smasher/) OR  [Play at ant.peshal.xyz!](https://ant.peshal.xyz)**
 
 ---
 
